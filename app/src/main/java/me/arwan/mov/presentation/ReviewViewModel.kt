@@ -1,14 +1,10 @@
 package me.arwan.mov.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import me.arwan.mov.core.utils.ExceptionManager
 import me.arwan.mov.core.utils.Resource
 import me.arwan.mov.core.utils.launchSafeIO
 import me.arwan.mov.domain.MoviesRepository
-import me.arwan.mov.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
