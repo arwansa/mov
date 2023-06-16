@@ -18,7 +18,7 @@ fun MovieGridView(movieList: List<Movie>, actionClick: (Movie) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = rememberLazyGridState(),
     ) {
-        itemsIndexed(movieList) { index, movie ->
+        itemsIndexed(movieList) { _, movie ->
             ItemMovie(movie = movie, actionClick = actionClick)
         }
     }

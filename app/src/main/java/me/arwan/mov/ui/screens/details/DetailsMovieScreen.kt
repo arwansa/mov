@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -31,6 +32,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.arwan.mov.models.Video
 import me.arwan.mov.presentation.VideoViewModel
+import me.arwan.mov.ui.screens.destinations.ReviewScreenDestination
 import me.arwan.mov.ui.screens.details.componets.YouTubeVideoPreview
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -94,7 +96,8 @@ fun DetailsMovieScreen(
                             top = detailsStateScreen.paddingTopTitle.dp,
                         )
                 )
-            }) {
+            }
+        ) {
 
             Column(
                 modifier = Modifier
@@ -104,6 +107,18 @@ fun DetailsMovieScreen(
                 ListVideoState(listVideo = stateListVideo)
                 Spacer(modifier = Modifier.height(10.dp))
                 ListCastState(listCast = stateListCast)
+                Spacer(modifier = Modifier.height(10.dp))
+                Button(
+                    onClick = {
+                        navigator.navigate(ReviewScreenDestination(movie))
+                    },
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .align(Alignment.CenterHorizontally),
+                    shape = CircleShape
+                ) {
+                    Text(text = stringResource(R.string.title_show_reviews))
+                }
             }
 
         }
