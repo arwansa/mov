@@ -41,7 +41,7 @@ fun InfoCardMovie(
         Spacer(modifier = Modifier.height(10.dp))
         InfoMovie(
             info = stringResource(id = R.string.sub_title_value, voteAverage),
-            iconInfo = R.drawable.ic_start
+            iconInfo = R.drawable.ic_star
         )
         Spacer(modifier = Modifier.height(10.dp))
         InfoMovie(info = dateMovie, iconInfo = R.drawable.ic_time)
