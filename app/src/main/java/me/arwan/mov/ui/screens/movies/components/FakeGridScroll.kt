@@ -19,9 +19,6 @@ fun FakeListScroll(
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
 
     Column(modifier = modifier) {
-        TitleFakeMovie(
-            modifier = modifier.myShimmer(shimmer)
-        )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
@@ -37,20 +34,6 @@ fun FakeListScroll(
             }
         }
     }
-}
-
-@Composable
-private fun TitleFakeMovie(
-    modifier: Modifier = Modifier
-) {
-
-    Box(
-        modifier = Modifier
-            .padding(vertical = 5.dp, horizontal = 10.dp)
-            .size(width = 120.dp, height = 20.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .then(modifier)
-    )
 }
 
 @Composable
