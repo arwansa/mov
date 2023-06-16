@@ -24,6 +24,7 @@ import me.arwan.mov.models.Movie
 import me.arwan.mov.ui.screens.destinations.DetailsMovieScreenDestination
 import me.arwan.mov.ui.screens.movies.components.FakeListScroll
 import me.arwan.mov.ui.screens.movies.components.ItemMovie
+import me.arwan.mov.ui.screens.movies.components.MovieGridView
 
 @Destination
 @Composable
@@ -54,7 +55,6 @@ fun MoviesScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .verticalScroll(rememberScrollState())
         ) {
             Movies(movies = stateMovies, actionClick = { movie ->
                 castViewModel.getCastFromMovie(movie.id)
@@ -68,9 +68,7 @@ fun MoviesScreen(
 fun Movies(movies: Resource<List<Movie>>, actionClick: (Movie) -> Unit) {
     when (movies) {
         is Resource.Success -> {
-            movies.data.forEach {
-                ItemMovie(movie = it, actionClick = actionClick)
-            }
+            MovieGridView(movieList = movies.data, actionClick = actionClick)
         }
 
         else -> FakeListScroll()

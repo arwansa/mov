@@ -1,7 +1,8 @@
 package me.arwan.mov.ui.screens.movies.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,9 +22,13 @@ fun FakeListScroll(
         TitleFakeMovie(
             modifier = modifier.myShimmer(shimmer)
         )
-        LazyRow(modifier = Modifier.fillMaxWidth()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             items(
-                count = 5,
+                count = 12,
                 key = { it }
             ) {
                 CardContainerFake(
