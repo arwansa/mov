@@ -1,14 +1,18 @@
 package me.arwan.mov.ui.screens.review
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
@@ -18,7 +22,6 @@ import me.arwan.mov.core.utils.shareViewModel
 import me.arwan.mov.models.Movie
 import me.arwan.mov.models.Review
 import me.arwan.mov.presentation.ReviewViewModel
-import me.arwan.mov.ui.share.FakeGridScroll
 import me.arwan.mov.ui.share.ToolbarBack
 import me.arwan.mov.ui.states.ReviewScreenState
 import me.arwan.mov.ui.states.rememberReviewScreenState
@@ -68,6 +71,11 @@ private fun ListReviewState(reviews: Resource<List<Review>>) {
             }
         }
 
-        else -> FakeGridScroll()
+        else -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }

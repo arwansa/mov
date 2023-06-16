@@ -119,6 +119,7 @@ fun DetailsMovieScreen(
                 ) {
                     Text(text = stringResource(R.string.title_show_reviews))
                 }
+                Spacer(modifier = Modifier.height(15.dp))
             }
 
         }
