@@ -3,10 +3,9 @@ package me.arwan.mov.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import me.arwan.mov.models.Genre
-import me.arwan.mov.models.Movie
 
 @Database(
-    entities = [Genre::class, Movie::class],
+    entities = [Genre::class],
     version = 1,
     exportSchema = false
 )
