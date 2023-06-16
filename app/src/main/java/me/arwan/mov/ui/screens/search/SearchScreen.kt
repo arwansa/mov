@@ -32,11 +32,13 @@ import me.arwan.mov.ui.states.rememberSearchScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.arwan.mov.models.Movie
+import me.arwan.mov.presentation.VideoViewModel
 
 @Destination
 @Composable
 fun SearchScreen(
     navigator: DestinationsNavigator,
+    videoViewModel: VideoViewModel = shareViewModel(),
     castViewModel: CastViewModel = shareViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     searchScreenState: SearchScreenState = rememberSearchScreenState()
@@ -63,6 +65,7 @@ fun SearchScreen(
             modifier = Modifier.padding(paddingValues),
             stateListSearch = listMovies,
             actionClickMovie = {
+                videoViewModel.getVideoFromMovie(it.id)
                 castViewModel.getCastFromMovie(it.id)
                 navigator.navigate(DetailsMovieScreenDestination(it))
             })

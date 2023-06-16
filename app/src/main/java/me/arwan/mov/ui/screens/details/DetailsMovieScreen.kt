@@ -29,6 +29,9 @@ import me.arwan.mov.ui.states.DetailsScreenState
 import me.arwan.mov.ui.states.rememberDetailsScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import me.arwan.mov.models.Video
+import me.arwan.mov.presentation.VideoViewModel
+import me.arwan.mov.ui.screens.details.componets.YouTubeVideoPreview
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 
@@ -38,10 +41,13 @@ fun DetailsMovieScreen(
     movie: Movie,
     navigator: DestinationsNavigator,
     castViewModel: CastViewModel = shareViewModel(),
+    videoViewModel: VideoViewModel = shareViewModel(),
     detailsStateScreen: DetailsScreenState = rememberDetailsScreenState()
 ) {
 
     val stateListCast by castViewModel.listCastMovie.collectAsState()
+    val stateListVideo by videoViewModel.listVideoMovie.collectAsState()
+
     val maxTextLinesTitle by remember(detailsStateScreen.progressCollapsing) {
         derivedStateOf {
             if (detailsStateScreen.progressCollapsing < 0.8f) 1 else Int.MAX_VALUE
@@ -50,6 +56,7 @@ fun DetailsMovieScreen(
 
     LaunchedEffect(key1 = Unit) {
         castViewModel.messageCast.collect(detailsStateScreen::showSnackMessage)
+        videoViewModel.messageVideo.collect(detailsStateScreen::showSnackMessage)
     }
 
     Scaffold(
@@ -94,13 +101,14 @@ fun DetailsMovieScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 OverviewMovie(movie = movie)
+                ListVideoState(listVideo = stateListVideo)
+                Spacer(modifier = Modifier.height(10.dp))
                 ListCastState(listCast = stateListCast)
             }
 
         }
     }
 }
-
 
 @Composable
 private fun OverviewMovie(movie: Movie) {
@@ -113,6 +121,29 @@ private fun OverviewMovie(movie: Movie) {
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = movie.description, style = MaterialTheme.typography.body1)
         }
+    }
+}
+
+@Composable
+private fun ListVideoState(
+    listVideo: Resource<List<Video>>
+) {
+    when (listVideo) {
+        is Resource.Success -> {
+            Text(
+                text = stringResource(R.string.title_video),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
+                style = MaterialTheme.typography.h6
+            )
+            LazyRow {
+                items(listVideo.data,
+                    key = { it.name }) { video ->
+                    YouTubeVideoPreview(video.source)
+                }
+            }
+        }
+
+        else -> FakeListScroll()
     }
 }
 
@@ -138,7 +169,6 @@ private fun ListCastState(
         else -> FakeListScroll()
     }
 }
-
 
 @Composable
 private fun TitleMovieRoad(

@@ -19,6 +19,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.arwan.mov.core.utils.Resource
 import me.arwan.mov.models.Genre
 import me.arwan.mov.models.Movie
+import me.arwan.mov.presentation.VideoViewModel
 import me.arwan.mov.ui.screens.destinations.DetailsMovieScreenDestination
 import me.arwan.mov.ui.share.FakeGridScroll
 import me.arwan.mov.ui.screens.movies.components.MovieGridView
@@ -28,6 +29,7 @@ import me.arwan.mov.ui.screens.movies.components.MovieGridView
 fun MoviesScreen(
     genre: Genre,
     navigator: DestinationsNavigator,
+    videoViewModel: VideoViewModel = shareViewModel(),
     castViewModel: CastViewModel = shareViewModel(),
     moviesViewModel: MoviesViewModel = shareViewModel(),
     moviesScreenState: MoviesScreenState = rememberMoviesScreenState()
@@ -53,7 +55,8 @@ fun MoviesScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-            Movies(movies = stateMovies, actionClick = { movie ->
+            ListMoviesState(movies = stateMovies, actionClick = { movie ->
+                videoViewModel.getVideoFromMovie(movie.id)
                 castViewModel.getCastFromMovie(movie.id)
                 navigator.navigate(DetailsMovieScreenDestination(movie))
             })
@@ -62,7 +65,7 @@ fun MoviesScreen(
 }
 
 @Composable
-fun Movies(movies: Resource<List<Movie>>, actionClick: (Movie) -> Unit) {
+private fun ListMoviesState(movies: Resource<List<Movie>>, actionClick: (Movie) -> Unit) {
     when (movies) {
         is Resource.Success -> {
             MovieGridView(movieList = movies.data, actionClick = actionClick)
