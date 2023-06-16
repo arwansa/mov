@@ -28,6 +28,7 @@ import me.arwan.mov.models.Genre
 import me.arwan.mov.presentation.GenresViewModel
 import me.arwan.mov.ui.screens.destinations.MoviesScreenDestination
 import me.arwan.mov.ui.screens.destinations.SearchScreenDestination
+import me.arwan.mov.ui.screens.genre.components.ListGenre
 import me.arwan.mov.ui.share.ToolbarBack
 import me.arwan.mov.ui.states.GenresScreenState
 import me.arwan.mov.ui.states.rememberGenresScreenState
@@ -62,33 +63,12 @@ fun GenresScreen(
                     .padding(it)
                     .verticalScroll(rememberScrollState())
             ) {
-                if (stateGenres is Resource.Success) {
-                    val genres = (stateGenres as Resource.Success<List<Genre>>).data
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Movie Genres",
-                            style = MaterialTheme.typography.h5,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        genres.forEach { genre ->
-                            Text(
-                                text = genre.name,
-                                style = MaterialTheme.typography.body1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(bottom = 8.dp)
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .clickable {
-                                        navigator.navigate(MoviesScreenDestination(genre))
-                                    }
-                            )
-                        }
-                    }
-                }
+                ListGenre(
+                    genres = stateGenres,
+                    actionClick = {
+                        navigator.navigate(MoviesScreenDestination(it))
+                    },
+                    retryClick = { genresViewModel.getGenres() })
             }
         }
     }
