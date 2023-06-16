@@ -24,7 +24,7 @@ import me.arwan.mov.models.Movie
 import me.arwan.mov.presentation.CastViewModel
 import me.arwan.mov.ui.screens.details.componets.HeaderMovie
 import me.arwan.mov.ui.screens.details.componets.ItemCast
-import me.arwan.mov.ui.screens.movies.components.FakeListScroll
+import me.arwan.mov.ui.share.FakeListScroll
 import me.arwan.mov.ui.states.DetailsScreenState
 import me.arwan.mov.ui.states.rememberDetailsScreenState
 import com.ramcosta.composedestinations.annotation.Destination

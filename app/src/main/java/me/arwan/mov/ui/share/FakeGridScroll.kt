@@ -1,19 +1,17 @@
-package me.arwan.mov.ui.screens.movies.components
+package me.arwan.mov.ui.share
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import me.arwan.mov.core.utils.myShimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
 @Composable
-fun FakeListScroll(
+fun FakeGridScroll(
     modifier: Modifier = Modifier
 ) {
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
@@ -28,25 +26,10 @@ fun FakeListScroll(
                 count = 12,
                 key = { it }
             ) {
-                CardContainerFake(
+                FakeCardContainer(
                     modifier = Modifier.myShimmer(shimmer)
                 )
             }
         }
     }
-}
-
-@Composable
-private fun CardContainerFake(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = Modifier
-            .height(200.dp)
-            .width(150.dp)
-            .padding(4.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .then(modifier)
-
-    )
 }

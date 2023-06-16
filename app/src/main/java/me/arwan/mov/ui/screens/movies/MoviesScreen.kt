@@ -2,8 +2,6 @@ package me.arwan.mov.ui.screens.movies
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,8 +20,7 @@ import me.arwan.mov.core.utils.Resource
 import me.arwan.mov.models.Genre
 import me.arwan.mov.models.Movie
 import me.arwan.mov.ui.screens.destinations.DetailsMovieScreenDestination
-import me.arwan.mov.ui.screens.movies.components.FakeListScroll
-import me.arwan.mov.ui.screens.movies.components.ItemMovie
+import me.arwan.mov.ui.share.FakeGridScroll
 import me.arwan.mov.ui.screens.movies.components.MovieGridView
 
 @Destination
@@ -71,7 +68,7 @@ fun Movies(movies: Resource<List<Movie>>, actionClick: (Movie) -> Unit) {
             MovieGridView(movieList = movies.data, actionClick = actionClick)
         }
 
-        else -> FakeListScroll()
+        else -> FakeGridScroll()
     }
 }
 
