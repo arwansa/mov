@@ -22,18 +22,10 @@ class Application : Application() {
 
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
 
-
         Timber.plant(object : Timber.DebugTree() {
-
-            override fun log(
-                priority: Int, tag: String?, message: String, t: Throwable?,
-            ) {
+            override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
                 Logger.log(priority, "@@", message, t)
             }
         })
     }
 }
-
-// Dependencies needed in build.gradle (app) file - Remember to update version if required.
-// implementation 'com.orhanobut:logger:2.2.0'
-// implementation 'com.jakewharton.timber:timber:4.7.1'

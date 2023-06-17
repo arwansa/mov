@@ -22,6 +22,7 @@ import me.arwan.mov.models.Movie
 import me.arwan.mov.models.Review
 import me.arwan.mov.presentation.ReviewViewModel
 import me.arwan.mov.ui.screens.review.component.ReviewItem
+import me.arwan.mov.ui.share.RetryButton
 import me.arwan.mov.ui.share.ToolbarBack
 import me.arwan.mov.ui.states.ReviewScreenState
 import me.arwan.mov.ui.states.rememberReviewScreenState
@@ -56,27 +57,33 @@ fun ReviewScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-            ListReviewState(stateReviews)
+            ListReviewState(stateReviews) {
+                reviewViewModel.getMovieReview(movie.id, 1)
+            }
         }
     }
 }
 
 @Composable
-private fun ListReviewState(reviews: Resource<List<Review>>) {
+private fun ListReviewState(reviews: Resource<List<Review>>, retryClick: () -> Unit) {
     when (reviews) {
         is Resource.Success -> {
             LazyColumn {
-                items(reviews.data, key = { it.author }) { review ->
+                items(reviews.data, key = { it.id }) { review ->
                     ReviewItem(review)
                 }
             }
         }
 
-        else -> Box(
+        is Resource.Loading -> Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
+        }
+
+        else -> RetryButton {
+            retryClick()
         }
     }
 }
