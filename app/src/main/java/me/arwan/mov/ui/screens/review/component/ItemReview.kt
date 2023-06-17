@@ -17,7 +17,7 @@ import me.arwan.mov.ui.theme.Orange200
 import me.arwan.mov.ui.theme.Orange700
 
 @Composable
-fun ReviewItem(review: Review) {
+fun ItemReview(review: Review) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -113,6 +113,9 @@ dependencies {
     implementation 'io.github.raamcosta.compose-destinations:core:1.5.12-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.12-beta'
 
+    // paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha17"
+
     // splash screen
     implementation 'androidx.core:core-splashscreen:1.0.0'
 

@@ -1,5 +1,6 @@
 package me.arwan.mov.domain
 
+import androidx.paging.PagingData
 import me.arwan.mov.models.Cast
 import me.arwan.mov.models.Movie
 import kotlinx.coroutines.flow.Flow
@@ -11,8 +12,8 @@ interface MoviesRepository {
     val listGenres: Flow<List<Genre>>
 
     suspend fun upsertGenres(): Int
-    suspend fun getDiscoverMoviesByGenre(withGenre: Long, page: Int): List<Movie>
-    suspend fun getMovieReviews(movieId: Long, page: Int): List<Review>
+    fun getAllDiscoverMoviesByGenre(withGenre: Long): Flow<PagingData<Movie>>
+    fun getAllMovieReviews(movieId: Long): Flow<PagingData<Review>>
     suspend fun getVideos(movieId: Long): List<Video>
     suspend fun getCastFromMovie(movieId: Long): List<Cast>
     suspend fun getMoviesForSearch(query: String): List<Movie>

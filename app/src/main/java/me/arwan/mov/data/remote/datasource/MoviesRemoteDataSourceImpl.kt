@@ -1,11 +1,18 @@
 package me.arwan.mov.data.remote.datasource
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import me.arwan.mov.core.utils.ExceptionManager
 import me.arwan.mov.core.utils.InternetCheck
 import me.arwan.mov.data.remote.services.MoviesServices
 import me.arwan.mov.models.Cast
 import me.arwan.mov.models.Movie
 import kotlinx.coroutines.withTimeoutOrNull
+import me.arwan.mov.data.remote.pagingsource.MoviePagingSource
 import me.arwan.mov.models.Genre
 import me.arwan.mov.models.Review
 import me.arwan.mov.models.Video
@@ -18,19 +25,50 @@ class MoviesRemoteDataSourceImpl(
         moviesServices.getGenres()
     }.genres.map(Genre::fromResponse)
 
-    override suspend fun getDiscoverMoviesByGenre(withGenre: Long, page: Int): List<Movie> =
-        callApiWithTimeout {
-            moviesServices.getDiscoverMoviesByGenre(
-                withGenres = withGenre,
-                sortBy = "popularity.desc",
-                page = page
-            )
-        }.results.map(Movie::fromResponse)
+    override fun getAllDiscoverMoviesByGenre(withGenre: Long): Flow<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    response = { nextPage ->
+                        callApiWithTimeout {
+                            moviesServices.getDiscoverMoviesByGenre(
+                                withGenres = withGenre,
+                                sortBy = "popularity.desc",
+                                page = nextPage
+                            )
+                        }
+                    }
+                )
+            }
+        ).flow.map { pagingData ->
+            pagingData.map(Movie::fromResponse)
+        }
 
-    override suspend fun getMovieReviews(movieId: Long, page: Int): List<Review> =
-        callApiWithTimeout {
-            moviesServices.getMovieReviews(movieId, page)
-        }.results.map(Review::fromResponse)
+    override fun getAllMovieReviews(movieId: Long): Flow<PagingData<Review>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = {
+                MoviePagingSource(
+                    response = { nextPage ->
+                        callApiWithTimeout {
+                            moviesServices.getMovieReviews(
+                                movieId = movieId,
+                                page = nextPage
+                            )
+                        }
+                    }
+                )
+            }
+        ).flow.map { pagingData ->
+            pagingData.map(Review::fromResponse)
+        }
 
     override suspend fun getVideos(movieId: Long): List<Video> = callApiWithTimeout {
         moviesServices.getVideos(movieId)
@@ -53,5 +91,9 @@ class MoviesRemoteDataSourceImpl(
     ): T {
         if (!InternetCheck.isNetworkAvailable()) throw Exception(ExceptionManager.NO_NETWORK_ERROR)
         return withTimeoutOrNull(timeout) { callApi() }!!
+    }
+
+    private companion object {
+        const val PAGE_SIZE = 20
     }
 }

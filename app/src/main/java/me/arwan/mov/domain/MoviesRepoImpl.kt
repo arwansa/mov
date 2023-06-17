@@ -1,5 +1,6 @@
 package me.arwan.mov.domain
 
+import androidx.paging.PagingData
 import me.arwan.mov.data.local.datasource.MovieLocalDataSource
 import me.arwan.mov.data.remote.datasource.MoviesRemoteDataSource
 import me.arwan.mov.models.Cast
@@ -22,11 +23,11 @@ class MoviesRepoImpl @Inject constructor(
         return genres.size
     }
 
-    override suspend fun getDiscoverMoviesByGenre(withGenre: Long, page: Int): List<Movie> =
-        moviesRemoteDataSource.getDiscoverMoviesByGenre(withGenre, page)
+    override fun getAllDiscoverMoviesByGenre(withGenre: Long): Flow<PagingData<Movie>> =
+        moviesRemoteDataSource.getAllDiscoverMoviesByGenre(withGenre)
 
-    override suspend fun getMovieReviews(movieId: Long, page: Int): List<Review> =
-        moviesRemoteDataSource.getMovieReviews(movieId, page)
+    override fun getAllMovieReviews(movieId: Long): Flow<PagingData<Review>> =
+        moviesRemoteDataSource.getAllMovieReviews(movieId)
 
     override suspend fun getVideos(movieId: Long): List<Video> =
         moviesRemoteDataSource.getVideos(movieId)

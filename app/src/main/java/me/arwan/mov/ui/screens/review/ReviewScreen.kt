@@ -1,27 +1,19 @@
 package me.arwan.mov.ui.screens.review
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import me.arwan.mov.core.utils.Resource
 import me.arwan.mov.core.utils.shareViewModel
 import me.arwan.mov.models.Movie
-import me.arwan.mov.models.Review
 import me.arwan.mov.presentation.ReviewViewModel
-import me.arwan.mov.ui.screens.review.component.ReviewItem
+import me.arwan.mov.ui.screens.review.component.ItemReview
+import me.arwan.mov.ui.share.LoadingCircular
 import me.arwan.mov.ui.share.RetryButton
 import me.arwan.mov.ui.share.ToolbarBack
 import me.arwan.mov.ui.states.ReviewScreenState
@@ -36,13 +28,7 @@ fun ReviewScreen(
     reviewScreenState: ReviewScreenState = rememberReviewScreenState()
 ) {
 
-    val stateReviews by reviewViewModel.listReview.collectAsState()
-
-    reviewViewModel.getMovieReview(movie.id, 1)
-
-    LaunchedEffect(key1 = Unit) {
-        reviewViewModel.messageReview.collect(reviewScreenState::showSnackMessage)
-    }
+    val reviews = reviewViewModel.getAllMovieReview(movie.id).collectAsLazyPagingItems()
 
     Scaffold(
         scaffoldState = reviewScreenState.scaffoldState,
@@ -52,38 +38,31 @@ fun ReviewScreen(
                 actionBack = { navigator.popBackStack() }
             )
         }
-    ) {
-        Column(
+    ) { paddingValues ->
+        LazyColumn(
             modifier = Modifier
-                .padding(it)
+                .padding(paddingValues)
         ) {
-            ListReviewState(stateReviews) {
-                reviewViewModel.getMovieReview(movie.id, 1)
-            }
-        }
-    }
-}
-
-@Composable
-private fun ListReviewState(reviews: Resource<List<Review>>, retryClick: () -> Unit) {
-    when (reviews) {
-        is Resource.Success -> {
-            LazyColumn {
-                items(reviews.data, key = { it.id }) { review ->
-                    ReviewItem(review)
+            items(reviews.itemCount) { index ->
+                reviews[index]?.let { review ->
+                    ItemReview(review)
                 }
             }
-        }
+            reviews.apply {
+                item {
+                    when {
+                        loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                            LoadingCircular()
+                        }
 
-        is Resource.Loading -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-
-        else -> RetryButton {
-            retryClick()
+                        loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                            RetryButton {
+                                retry()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
